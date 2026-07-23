@@ -38,12 +38,6 @@ extension) or the driver setup in the Selenium project's test base classes. Same
 different meanings across the three companion projects — worth knowing before assuming they map
 1:1.
 
-**Why JavaScript, not TypeScript, unlike the other two companion projects:** an earlier draft of
-this project used TypeScript, for consistency with the Playwright and Selenium (also statically
-typed) projects. It was rewritten in plain JavaScript to match this repository's own name
-(`cypress-javascript-automation-portfolio`) and the "Cypress + JavaScript" framing from the
-original project proposal — see `docs/decisions.md`.
-
 Design decisions — including real Cypress-specific issues found and fixed during development —
 are documented in `docs/decisions.md`.
 
@@ -55,7 +49,7 @@ are documented in `docs/decisions.md`.
 ## Installation
 
 ```bash
-git clone <this-repo-url>
+git clone https://github.com/carmineQA/cypress-javascript-automation-portfolio.git
 cd cypress-javascript-automation-portfolio
 npm install
 ```
