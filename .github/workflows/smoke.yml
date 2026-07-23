@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: lts/*
       - name: Cypress smoke run
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           command: npm run test:smoke
         env:

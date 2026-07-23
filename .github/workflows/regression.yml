@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: lts/*
       - name: Cypress regression run (${{ matrix.spec-group }})
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           command: npx cypress run --spec "cypress/e2e/${{ matrix.spec-group }}/**/*.cy.ts" --expose grepTags=@regression
         env:
