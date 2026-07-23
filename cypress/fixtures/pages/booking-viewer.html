@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking Viewer (test harness)</title>
+</head>
+<body>
+<button id="load-booking">Load booking</button>
+<div id="status"></div>
+<div id="booking-details"></div>
+
+<script>
+document.getElementById('load-booking').addEventListener('click', async () => {
+  const statusEl = document.getElementById('status');
+  const detailsEl = document.getElementById('booking-details');
+  statusEl.textContent = 'Loading...';
+  detailsEl.textContent = '';
+
+  try {
+    const response = await fetch('https://restful-booker.herokuapp.com/booking/1');
+
+    if (!response.ok) {
+      statusEl.textContent = 'Error: could not load booking (status ' + response.status + ')';
+      return;
+    }
+
+    const booking = await response.json();
+
+    if (!booking || typeof booking.firstname !== 'string') {
+      statusEl.textContent = 'Error: booking data is incomplete';
+      return;
+    }
+
+    statusEl.textContent = 'Loaded';
+    detailsEl.textContent = booking.firstname + ' ' + booking.lastname;
+  } catch (error) {
+    statusEl.textContent = 'Error: network request failed';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+name: Regression Tests
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lint:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Check formatting
+        run: npm run format:check
+
+  test:
+    needs: [lint]
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Manually sharded by folder instead of relying on Cypress Cloud's paid load-balanced
+        # parallelization, so this workflow has no dependency on an external paid service. Each
+        # shard's HTML report is uploaded independently (see docs/decisions.md for why these
+        # aren't merged into one combined report the way the Playwright/Selenium companion
+        # projects do).
+        spec-group: [ui, api, mocked]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Cypress regression run (${{ matrix.spec-group }})
+        uses: cypress-io/github-action@v6
+        with:
+          command: npx cypress run --spec "cypress/e2e/${{ matrix.spec-group }}/**/*.cy.ts" --expose grepTags=@regression
+        env:
+          RESTFUL_BOOKER_USERNAME: ${{ secrets.RESTFUL_BOOKER_USERNAME }}
+          RESTFUL_BOOKER_PASSWORD: ${{ secrets.RESTFUL_BOOKER_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: mochawesome-report-${{ matrix.spec-group }}
+          path: mochawesome-report/
+          retention-days: 30
