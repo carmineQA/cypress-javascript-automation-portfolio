@@ -13,7 +13,7 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "@cypress/grep": "^6.0.2",
+    "@cypress/grep": "^6.0.3",
     "@eslint/js": "^10.0.1",
     "@faker-js/faker": "^10.5.0",
     "cypress": "^15.19.0",
